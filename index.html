@@ -230,8 +230,11 @@
             // Фон клетками
             for (let i = 0; i < tileCount; i++) {
                 for (let j = 0; j < tileCount; j++) {
-                    ctx.fillStyle = (i + j) % 2 === 0 ? 'rgba(79, 172, 254, 0.08)' : 'rgba(0, 242, 254, 0.06)';
+                    ctx.fillStyle = (i + j) % 2 === 0 ? '#1e293b' : '#172033';
                     ctx.fillRect(i * gridSize, j * gridSize, gridSize, gridSize);
+                    ctx.strokeStyle = 'rgba(79, 172, 254, 0.18)';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(i * gridSize, j * gridSize, gridSize, gridSize);
                 }
             }
 
