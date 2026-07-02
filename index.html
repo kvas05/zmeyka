@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Змейка</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             margin: 0;
             padding: 0;
-            background: #111;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: #fff;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -27,6 +30,7 @@
         canvas {
             background: #7ec850;
             border: 2px solid #555;
+            display: none;
         }
         #gameOver {
             display: none;
@@ -40,18 +44,101 @@
             font-size: 16px;
             cursor: pointer;
         }
+        #menu {
+            width: 360px;
+            max-width: 90vw;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        #menu h1 {
+            font-size: 42px;
+            margin: 0;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        #menu p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        #menu .play-btn {
+            width: 100%;
+            padding: 16px 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 0 8px 24px rgba(79, 172, 254, 0.35);
+            margin: 0;
+        }
+        #menu .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(79, 172, 254, 0.5);
+        }
+        #menu .play-btn:active {
+            transform: translateY(0);
+        }
+        #menu .icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.35);
+        }
+        #gameWrapper {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
-    <h1>Змейка</h1>
-    <div id="score">Счёт: 0</div>
-    <canvas id="game" width="400" height="400"></canvas>
-    <div id="gameOver">Игра окончена! Нажмите "Заново"</div>
-    <button onclick="resetGame()">Заново</button>
+    <div id="menu">
+        <div class="icon">🐍</div>
+        <h1>Змейка</h1>
+        <p>Собирай еду, расти и не врезайся в стены и в себя. Управление — стрелками на клавиатуре.</p>
+        <button class="play-btn" onclick="startGame()">Играть</button>
+    </div>
+
+    <div id="gameWrapper">
+        <div id="score">Счёт: 0</div>
+        <canvas id="game" width="400" height="400"></canvas>
+        <div id="gameOver">Игра окончена! Нажмите "Заново"</div>
+        <button onclick="resetGame()">Заново</button>
+    </div>
 
     <script>
+        const menu = document.getElementById('menu');
+        const gameWrapper = document.getElementById('gameWrapper');
         const canvas = document.getElementById('game');
         const ctx = canvas.getContext('2d');
+
+        function startGame() {
+            menu.style.display = 'none';
+            gameWrapper.style.display = 'flex';
+            canvas.style.display = 'block';
+            resetGame();
+        }
         const scoreEl = document.getElementById('score');
         const gameOverEl = document.getElementById('gameOver');
 
