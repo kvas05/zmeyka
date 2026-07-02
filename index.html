@@ -18,7 +18,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 16px;
+            overflow: hidden;
+            touch-action: none;
         }
         h1 {
             margin: 0 0 10px;
@@ -41,6 +44,10 @@
             border-radius: 16px;
             display: none;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            width: min(92vw, 92vh, 420px);
+            height: min(92vw, 92vh, 420px);
+            max-width: 420px;
+            max-height: 420px;
         }
         #gameOver {
             display: none;
@@ -139,6 +146,40 @@
             font-size: 40px;
             box-shadow: 0 10px 30px rgba(79, 172, 254, 0.35);
         }
+        @media (max-width: 480px) {
+            #menu {
+                padding: 28px 20px;
+                gap: 16px;
+            }
+            #menu h1 {
+                font-size: 32px;
+            }
+            #menu p {
+                font-size: 14px;
+            }
+            #menu .play-btn {
+                font-size: 18px;
+                padding: 14px 0;
+            }
+            #menu .icon {
+                width: 64px;
+                height: 64px;
+                font-size: 32px;
+            }
+            #score {
+                font-size: 18px;
+                padding: 8px 18px;
+                margin-bottom: 10px;
+            }
+            #gameOver {
+                font-size: 16px;
+                margin-top: 12px;
+            }
+            #gameWrapper .restart-btn {
+                font-size: 16px;
+                padding: 12px 0;
+            }
+        }
         #gameWrapper {
             display: none;
             flex-direction: column;
@@ -150,7 +191,7 @@
     <div id="menu">
         <div class="icon">🐍</div>
         <h1>Змейка</h1>
-        <p>Собирай еду, расти и не врезайся в стены и в себя. Управление — стрелками на клавиатуре.</p>
+        <p>Собирай еду, расти и не врезайся в стены и в себя. На компьютере — стрелками, на телефоне — свайпами.</p>
         <button class="play-btn" onclick="startGame()">Играть</button>
     </div>
 
@@ -393,6 +434,31 @@
                     break;
             }
         });
+
+        // Управление свайпами
+        let touchStartX = 0;
+        let touchStartY = 0;
+        canvas.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        canvas.addEventListener('touchend', (e) => {
+            if (!gameRunning) return;
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            const diffX = touchEndX - touchStartX;
+            const diffY = touchEndY - touchStartY;
+            const minSwipe = 30;
+
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > minSwipe) {
+                if (diffX > 0 && dx === 0) { dx = 1; dy = 0; }
+                else if (diffX < 0 && dx === 0) { dx = -1; dy = 0; }
+            } else if (Math.abs(diffY) > minSwipe) {
+                if (diffY > 0 && dy === 0) { dx = 0; dy = 1; }
+                else if (diffY < 0 && dy === 0) { dx = 0; dy = -1; }
+            }
+        }, { passive: true });
 
         setInterval(drawGame, 100);
     </script>
